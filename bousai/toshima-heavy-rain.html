@@ -1,0 +1,329 @@
+<title>豊島区 大雨のそなえ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#e9ebe7;
+    --sheet:#fbfbf9;
+    --sheet-2:#f2f3ef;
+    --ink:#1a1d19;
+    --ink-2:#3f453e;
+    --ink-3:#6e756c;
+    --rule:#cdd1c9;
+    --rule-soft:#e0e3dc;
+    --anchor:#2c4a3c;
+    --anchor-ink:#ffffff;
+    --link:#1f5f4a;
+    --focus:#1f5f4a;
+    /* 警戒レベル: 気象庁・内閣府の配色 */
+    --lv1:#ffffff;      --lv1-ink:#1a1d19; --lv1-edge:#9aa197;
+    --lv2:#f2e700;      --lv2-ink:#1a1d19; --lv2-edge:#c4bb00;
+    --lv3:#ff2800;      --lv3-ink:#ffffff; --lv3-edge:#ff2800;
+    --lv4:#aa00aa;      --lv4-ink:#ffffff; --lv4-edge:#aa00aa;
+    --lv5:#0c0c0c;      --lv5-ink:#ffffff; --lv5-edge:#0c0c0c;
+    --shadow:0 1px 2px rgba(26,29,25,.06), 0 10px 26px -20px rgba(26,29,25,.5);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#141613;
+      --sheet:#1d201c;
+      --sheet-2:#252923;
+      --ink:#e9ebe5;
+      --ink-2:#bcc1b8;
+      --ink-3:#8b9287;
+      --rule:#343a31;
+      --rule-soft:#292e26;
+      --anchor:#8fd0b4;
+      --anchor-ink:#141613;
+      --link:#8fd0b4;
+      --focus:#8fd0b4;
+      --lv1:#3a4036;    --lv1-ink:#e9ebe5; --lv1-edge:#6e756c;
+      --lv2:#f2e700;    --lv2-ink:#1a1d19; --lv2-edge:#f2e700;
+      --lv3:#ff2800;    --lv3-ink:#ffffff; --lv3-edge:#ff5636;
+      --lv4:#d24bd2;    --lv4-ink:#1a1d19; --lv4-edge:#d24bd2;
+      --lv5:#0c0c0c;    --lv5-ink:#ffffff; --lv5-edge:#8b9287;
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -22px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#141613;
+    --sheet:#1d201c;
+    --sheet-2:#252923;
+    --ink:#e9ebe5;
+    --ink-2:#bcc1b8;
+    --ink-3:#8b9287;
+    --rule:#343a31;
+    --rule-soft:#292e26;
+    --anchor:#8fd0b4;
+    --anchor-ink:#141613;
+    --link:#8fd0b4;
+    --focus:#8fd0b4;
+    --lv1:#3a4036;    --lv1-ink:#e9ebe5; --lv1-edge:#6e756c;
+    --lv2:#f2e700;    --lv2-ink:#1a1d19; --lv2-edge:#f2e700;
+    --lv3:#ff2800;    --lv3-ink:#ffffff; --lv3-edge:#ff5636;
+    --lv4:#d24bd2;    --lv4-ink:#1a1d19; --lv4-edge:#d24bd2;
+    --lv5:#0c0c0c;    --lv5-ink:#ffffff; --lv5-edge:#8b9287;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -22px rgba(0,0,0,.95);
+  }
+
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:36px 20px 76px;display:flex;flex-direction:column;gap:40px;}
+  h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;}
+  p{margin:0;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase;
+  }
+
+  /* ---- masthead ---- */
+  .masthead{display:flex;flex-direction:column;gap:10px;}
+  h1{font-size:clamp(28px,5.2vw,40px);line-height:1.3;letter-spacing:.01em;}
+  .standfirst{font-size:15px;color:var(--ink-2);max-width:60ch;}
+
+  /* ---- 確認先ボタン ---- */
+  .checks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .check{
+    display:flex;flex-direction:column;gap:5px;
+    background:var(--anchor);color:var(--anchor-ink);
+    padding:15px 17px;border-radius:2px;text-decoration:none;
+    box-shadow:var(--shadow);transition:transform .12s ease;
+  }
+  .check:hover{transform:translateY(-2px);}
+  .check .k{font-size:11px;letter-spacing:.14em;opacity:.75;font-family:"IBM Plex Mono",ui-monospace,monospace;}
+  .check .t{font-size:16px;font-weight:700;line-height:1.4;}
+  .check .d{font-size:12px;opacity:.85;line-height:1.6;}
+
+  /* ---- 警戒レベル階段 ---- */
+  h2{font-size:20px;letter-spacing:.04em;padding-bottom:8px;border-bottom:2px solid var(--ink);}
+  .section{display:flex;flex-direction:column;gap:16px;}
+  .lede{font-size:14px;color:var(--ink-2);max-width:62ch;}
+
+  .ladder{display:flex;flex-direction:column;gap:0;background:var(--sheet);border:1px solid var(--rule);border-radius:2px;overflow:hidden;box-shadow:var(--shadow);}
+  .step{
+    display:grid;grid-template-columns:74px 1fr 96px;gap:16px;align-items:start;
+    padding:16px 18px;border-bottom:1px solid var(--rule-soft);
+  }
+  .step:last-child{border-bottom:0;}
+  .chip{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border-radius:2px;padding:8px 4px;line-height:1.15;border:2px solid transparent;
+  }
+  .chip .lv{font-size:10px;letter-spacing:.1em;opacity:.8;}
+  .chip .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:26px;font-weight:600;}
+  .s1 .chip{background:var(--lv1);color:var(--lv1-ink);border-color:var(--lv1-edge);}
+  .s2 .chip{background:var(--lv2);color:var(--lv2-ink);border-color:var(--lv2-edge);}
+  .s3 .chip{background:var(--lv3);color:var(--lv3-ink);border-color:var(--lv3-edge);}
+  .s4 .chip{background:var(--lv4);color:var(--lv4-ink);border-color:var(--lv4-edge);}
+  .s5 .chip{background:var(--lv5);color:var(--lv5-ink);border-color:var(--lv5-edge);}
+
+  .step-body{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .step-name{font-size:17px;font-weight:700;line-height:1.45;}
+  .step-act{font-size:13.5px;color:var(--ink-2);}
+  .step-cav{font-size:12px;color:var(--ink-3);}
+  .issuer{
+    font-size:11.5px;letter-spacing:.06em;color:var(--ink-3);text-align:right;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;padding-top:5px;
+  }
+  .step.act{background:var(--sheet-2);}
+  .step.act .step-name{font-size:19px;}
+
+  .rule-note{
+    border-left:4px solid var(--lv4);padding:12px 16px;background:var(--sheet-2);
+    font-size:13.5px;color:var(--ink-2);border-radius:0 2px 2px 0;
+  }
+  .rule-note b{color:var(--ink);}
+
+  /* ---- リスク ---- */
+  .risks{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px;}
+  .risk{display:flex;flex-direction:column;gap:6px;}
+  h3{font-size:15px;letter-spacing:.03em;}
+  .risk p{font-size:13.5px;color:var(--ink-2);}
+  .spec{
+    display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:13px;
+    padding:14px 16px;background:var(--sheet);border:1px solid var(--rule);border-radius:2px;
+  }
+  .spec dt{color:var(--ink-3);white-space:nowrap;}
+  .spec dd{margin:0;color:var(--ink-2);font-family:"IBM Plex Mono",ui-monospace,monospace;}
+
+  /* ---- リンク集 ---- */
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:22px 34px;}
+  .linkgroup{display:flex;flex-direction:column;gap:7px;}
+  .linkgroup .eyebrow{padding-bottom:6px;border-bottom:1px solid var(--rule);}
+  .linkgroup a{
+    font-size:13.5px;color:var(--link);text-decoration-thickness:1px;text-underline-offset:3px;
+  }
+  .linkgroup a:hover{text-decoration-thickness:2px;}
+  .linkgroup span{font-size:12px;color:var(--ink-3);display:block;margin-top:-4px;}
+  a:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px;}
+
+  .disclaimer{
+    border:1px dashed var(--rule);border-radius:2px;padding:14px 18px;
+    font-size:12.5px;color:var(--ink-3);line-height:1.85;
+  }
+  .disclaimer b{color:var(--ink-2);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+  @media (max-width:720px){
+    .checks{grid-template-columns:1fr;}
+    .step{grid-template-columns:60px 1fr;gap:12px;}
+    .issuer{grid-column:2;text-align:left;padding-top:0;}
+    .chip .n{font-size:22px;}
+    .risks,.links{grid-template-columns:1fr;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Toshima-ku &middot; heavy rain</div>
+    <h1>豊島区 大雨のそなえ</h1>
+    <p class="standfirst">大雨のときに<b>何を見て、どのタイミングで動くか</b>を一枚にまとめた常設ページです。刻々と変わる数値はあえて載せていません &mdash; 最新の状況は下のボタンから各公式サイトで確認してください。</p>
+  </header>
+
+  <nav class="checks" aria-label="最新状況の確認先">
+    <a class="check" href="https://www.jma.go.jp/bosai/warning/#area_type=class20s&amp;area_code=13116" target="_blank" rel="noopener">
+      <span class="k">01</span>
+      <span class="t">警報・注意報</span>
+      <span class="d">気象庁。豊島区にいま何が出ているか</span>
+    </a>
+    <a class="check" href="https://www.jma.go.jp/bosai/risk/" target="_blank" rel="noopener">
+      <span class="k">02</span>
+      <span class="t">キキクル（危険度分布）</span>
+      <span class="d">気象庁。自分のいる場所の危険度を地図で</span>
+    </a>
+    <a class="check" href="https://bosai.city.toshima.lg.jp/" target="_blank" rel="noopener">
+      <span class="k">03</span>
+      <span class="t">豊島区防災ポータル</span>
+      <span class="d">避難情報・開設避難所・区からの発表</span>
+    </a>
+  </nav>
+
+  <section class="section">
+    <h2>警戒レベルと、とる行動</h2>
+    <p class="lede">内閣府「避難情報に関するガイドライン」による5段階。レベル1・2は気象庁が、レベル3以上は豊島区が出します。色は気象庁・内閣府の配色に合わせています。</p>
+
+    <div class="ladder">
+      <div class="step s1">
+        <div class="chip"><span class="lv">レベル</span><span class="n">1</span></div>
+        <div class="step-body">
+          <span class="step-name">早期注意情報</span>
+          <span class="step-act">災害への心構えを高める。ハザードマップで自宅と職場の浸水深を見ておく。</span>
+        </div>
+        <div class="issuer">気象庁</div>
+      </div>
+
+      <div class="step s2">
+        <div class="chip"><span class="lv">レベル</span><span class="n">2</span></div>
+        <div class="step-body">
+          <span class="step-name">大雨・洪水注意報</span>
+          <span class="step-act">避難先と経路、持ち出し品を確認する。スマホを充電し、区の情報配信を受け取れる状態にする。</span>
+        </div>
+        <div class="issuer">気象庁</div>
+      </div>
+
+      <div class="step s3">
+        <div class="chip"><span class="lv">レベル</span><span class="n">3</span></div>
+        <div class="step-body">
+          <span class="step-name">高齢者等避難</span>
+          <span class="step-act">高齢のかた、障害のあるかた、小さな子どもがいる世帯、避難を支援するかたは、危険な場所から避難を始める。</span>
+          <span class="step-cav">それ以外のかたも、この段階で避難の準備を終える。</span>
+        </div>
+        <div class="issuer">豊島区</div>
+      </div>
+
+      <div class="step s4 act">
+        <div class="chip"><span class="lv">レベル</span><span class="n">4</span></div>
+        <div class="step-body">
+          <span class="step-name">避難指示 &mdash; 全員避難</span>
+          <span class="step-act">対象地域のかたは全員、危険な場所から速やかに避難する。<b>避難はここまでに終える。</b></span>
+          <span class="step-cav">外が危険なら無理に移動せず、建物の上階へ移る（垂直避難）。</span>
+        </div>
+        <div class="issuer">豊島区</div>
+      </div>
+
+      <div class="step s5">
+        <div class="chip"><span class="lv">レベル</span><span class="n">5</span></div>
+        <div class="step-body">
+          <span class="step-name">緊急安全確保</span>
+          <span class="step-act">すでに災害が起きているか、起きていてもおかしくない状況。命の危険。直ちにその場で最善の安全確保を。</span>
+          <span class="step-cav">必ず発令されるとは限らない。レベル5を待ってはいけない。</span>
+        </div>
+        <div class="issuer">豊島区</div>
+      </div>
+    </div>
+
+    <p class="rule-note"><b>覚えるのは一つだけ。</b>「<b>レベル4・避難指示までに、危険な場所から全員避難</b>」。レベル5は避難が間に合わなくなってから出る情報で、出ないこともあります。</p>
+  </section>
+
+  <section class="section">
+    <h2>豊島区で起きること</h2>
+    <div class="risks">
+      <div class="risk">
+        <h3>河川氾濫より、まず内水氾濫</h3>
+        <p>区内で先に起きやすいのは、下水道の処理能力を超えた雨水があふれる内水氾濫です。谷や旧河道にあたる低い土地、道路のアンダーパス、地下室・地下駐車場・半地下の住戸に水が集まります。地下街や地下鉄の出入口も同じです。</p>
+      </div>
+      <div class="risk">
+        <h3>区の南部は神田川流域</h3>
+        <p>豊島区の洪水・内水ハザードマップは、神田川流域／石神井川および白子川流域／隅田川および新河岸川流域の3つの浸水想定で構成されています。区の南部にあたる神田川流域は想定される浸水が大きく、日頃の確認が特に要ります。</p>
+      </div>
+      <div class="risk">
+        <h3>避難＝避難所へ行くこと、ではない</h3>
+        <p>浸水想定の浅い場所で、頑丈な建物の上階にいるなら、外に出るより留まるほうが安全なことがあります。逆に地下・半地下にいるなら、浸水が始まる前に上へ。夜間や道路が冠水してからの移動は、それ自体が危険です。</p>
+      </div>
+      <div class="risk">
+        <h3>先に済ませておくこと</h3>
+        <p>ハザードマップで自宅・職場の浸水深を見る。区の安全・安心メールを登録する。スマホの緊急速報を切っていないか確認する。地下に置いてある大事なものを上げておく。</p>
+      </div>
+    </div>
+
+    <dl class="spec">
+      <dt>ハザードマップ</dt><dd>豊島区洪水・内水ハザードマップ（令和6年9月発行）</dd>
+      <dt>想定した雨</dt><dd>総雨量 690 mm / 時間最大雨量 153 mm</dd>
+      <dt>対象流域</dt><dd>神田川 ／ 石神井川・白子川 ／ 隅田川・新河岸川</dd>
+      <dt>気象の予報区</dt><dd>東京都 東京地方（130010）／ 豊島区（13116）</dd>
+    </dl>
+  </section>
+
+  <section class="section">
+    <h2>情報源</h2>
+    <div class="links">
+      <div class="linkgroup">
+        <div class="eyebrow">豊島区</div>
+        <a href="https://bosai.city.toshima.lg.jp/" target="_blank" rel="noopener">豊島区防災ポータル</a>
+        <span>避難情報、開設中の避難所、気象警報</span>
+        <a href="https://www.city.toshima.lg.jp/042/bosai/taisaku/hazard-map/010305.html" target="_blank" rel="noopener">洪水・内水ハザードマップ</a>
+        <span>自宅・職場の浸水深はここで確認</span>
+        <a href="https://www.city.toshima.lg.jp/046/bosai/anzen/003876.html" target="_blank" rel="noopener">豊島区安全・安心メール</a>
+        <span>登録制。土砂災害警戒情報・記録的短時間大雨情報も配信</span>
+        <a href="https://www.city.toshima.lg.jp/044/bosai/taisaku/hinanjo/006307.html" target="_blank" rel="noopener">避難場所等の一覧</a>
+        <a href="https://www.city.toshima.lg.jp/044/bosai/bousaijigyou/2303171356.html" target="_blank" rel="noopener">福祉救援センター・避難場所・一時集合場所</a>
+        <span>高齢のかた、障害のあるかた、乳幼児のための受入施設</span>
+      </div>
+      <div class="linkgroup">
+        <div class="eyebrow">気象・河川</div>
+        <a href="https://www.jma.go.jp/bosai/warning/#area_type=class20s&amp;area_code=13116" target="_blank" rel="noopener">気象庁 &mdash; 警報・注意報（豊島区）</a>
+        <a href="https://www.jma.go.jp/bosai/risk/" target="_blank" rel="noopener">気象庁 &mdash; キキクル（危険度分布）</a>
+        <span>浸水・洪水・土砂の危険度を地図で色分け</span>
+        <a href="https://www.kasen-suibo.metro.tokyo.lg.jp/" target="_blank" rel="noopener">東京都 水防災総合情報システム</a>
+        <span>都内の雨量・河川水位のリアルタイム</span>
+        <a href="https://www.river.go.jp/" target="_blank" rel="noopener">国土交通省 &mdash; 川の防災情報</a>
+        <a href="https://typhoon.yahoo.co.jp/weather/river/8303040044/" target="_blank" rel="noopener">神田川の水位情報</a>
+        <a href="https://crisis.yahoo.co.jp/evacuation/13/13116/" target="_blank" rel="noopener">豊島区の避難情報・避難所開設情報</a>
+        <a href="https://www.gov-online.go.jp/article/201906/entry-7786.html" target="_blank" rel="noopener">政府広報 &mdash; 5段階の警戒レベル</a>
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer">
+    <b>このページについて。</b>2026年9月7日時点で、豊島区・気象庁・内閣府・東京都の公開情報をもとに作成した<b>常設の手引き</b>です。警報・注意報や避難情報といった刻々と変わる値は、古くなったものが残るほうが危険なため、あえて掲載せず確認先へのリンクにとどめています。<b>自動更新はしません。</b>ハザードマップの発行年や区の制度は変わることがあるため、実際の避難行動は必ずリンク先の一次情報に従ってください。週間の見通しは<a href="https://claude.ai/code/artifact/8932cf28-7927-4b27-93a6-a7392aeb398b" target="_blank" rel="noopener">豊島区の週間天気</a>のページへ。
+  </p>
+
+</div>
