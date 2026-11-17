@@ -69,7 +69,7 @@ class MonoHighlightService : AccessibilityService(), SharedPreferences.OnSharedP
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         when (key) {
             Prefs.KEY_ACTIVE -> if (Prefs.isActive(this)) showOverlay() else hideOverlay()
-            Prefs.KEY_COLORS, Prefs.KEY_TOLERANCE -> applyParams()
+            Prefs.KEY_COLORS, Prefs.KEY_TOLERANCE, Prefs.KEY_HIGHLIGHT -> applyParams()
         }
     }
 
@@ -108,7 +108,7 @@ class MonoHighlightService : AccessibilityService(), SharedPreferences.OnSharedP
     }
 
     private fun applyParams() {
-        overlay?.setParams(Prefs.colors(this), Prefs.toleranceDistance(this))
+        overlay?.setParams(Prefs.colors(this), Prefs.toleranceDistance(this), Prefs.highlightColor(this))
     }
 
     // ---------------------------------------------------------------- capture

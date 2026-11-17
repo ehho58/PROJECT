@@ -29,6 +29,8 @@ class MainActivity : Activity() {
     private lateinit var activeSwitch: Switch
     private val colorFields = mutableListOf<EditText>()
     private val swatches = mutableListOf<View>()
+    private lateinit var hlField: EditText
+    private lateinit var hlSwatch: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +81,27 @@ class MainActivity : Activity() {
             swatches += swatch
         }
 
+        root.addView(label("一致した部分の表示色（空欄なら元の色のまま）"))
+        val hlRow = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        hlSwatch = View(this)
+        hlField = EditText(this).apply {
+            hint = "#FF0000"
+            setText(Prefs.highlightString(this@MainActivity))
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            isSingleLine = true
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+                override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    prefs.edit().putString(Prefs.KEY_HIGHLIGHT, text.toString().trim()).apply()
+                    updateSwatches()
+                }
+            })
+        }
+        hlRow.addView(hlSwatch, LinearLayout.LayoutParams(dp(36), dp(36)).apply { marginEnd = dp(12) })
+        hlRow.addView(hlField, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        root.addView(hlRow)
+
         val tolLabel = label("")
         root.addView(tolLabel)
         root.addView(seek(100, prefs.getInt(Prefs.KEY_TOLERANCE, Prefs.DEFAULT_TOLERANCE)) { v ->
@@ -122,9 +145,11 @@ class MainActivity : Activity() {
     }
 
     private fun updateSwatches() {
-        colorFields.forEachIndexed { i, f ->
+        val fields = colorFields + hlField
+        val views = swatches + hlSwatch
+        fields.forEachIndexed { i, f ->
             val c = Prefs.parseColor(f.text.toString())
-            swatches[i].background = GradientDrawable().apply {
+            views[i].background = GradientDrawable().apply {
                 cornerRadius = dp(6).toFloat()
                 setColor(c ?: Color.TRANSPARENT)
                 setStroke(dp(1), Color.GRAY)

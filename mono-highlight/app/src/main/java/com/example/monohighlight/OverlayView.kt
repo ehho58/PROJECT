@@ -28,7 +28,7 @@ class OverlayView(context: Context) : View(context) {
     private val loc = IntArray(2)
 
     init {
-        setParams(listOf(Color.RED), 0.09f)
+        setParams(listOf(Color.BLACK), 0.09f, Color.RED)
     }
 
     fun setPieces(newPieces: List<Piece>) {
@@ -36,7 +36,7 @@ class OverlayView(context: Context) : View(context) {
         invalidate()
     }
 
-    fun setParams(colors: List<Int>, tolerance: Float) {
+    fun setParams(colors: List<Int>, tolerance: Float, highlight: Int?) {
         val enabled = FloatArray(4)
         for (i in 0 until 4) {
             val c = colors.getOrNull(i)
@@ -46,6 +46,8 @@ class OverlayView(context: Context) : View(context) {
         shader.setFloatUniform("en", enabled)
         shader.setFloatUniform("tol", tolerance)
         shader.setFloatUniform("soft", 0.05f)
+        shader.setColorUniform("hl", highlight ?: Color.BLACK)
+        shader.setFloatUniform("useHl", if (highlight != null) 1f else 0f)
         invalidate()
     }
 
@@ -77,6 +79,8 @@ class OverlayView(context: Context) : View(context) {
             uniform half4 en;   // 各色の有効/無効 (1 or 0)
             uniform half tol;   // この距離以内は完全に元の色
             uniform half soft;  // tol からこの幅でグレーへなめらかに移行
+            layout(color) uniform half4 hl; // 一致部分の表示色
+            uniform half useHl;             // 1: hl で塗る / 0: 元の色のまま
 
             half m(half3 rgb, half4 t, half e) {
                 return e * (1.0 - smoothstep(tol, tol + soft, distance(rgb, t.rgb)));
@@ -88,7 +92,8 @@ class OverlayView(context: Context) : View(context) {
                 half g = dot(rgb, half3(0.2126, 0.7152, 0.0722));
                 half k = max(max(m(rgb, c0, en.x), m(rgb, c1, en.y)),
                              max(m(rgb, c2, en.z), m(rgb, c3, en.w)));
-                return half4(mix(half3(g), rgb, k) * c.a, c.a);
+                half3 keep = useHl > 0.5 ? hl.rgb : rgb;
+                return half4(mix(half3(g), keep, k) * c.a, c.a);
             }
         """
     }
