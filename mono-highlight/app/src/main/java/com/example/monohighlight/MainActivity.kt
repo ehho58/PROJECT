@@ -1,6 +1,10 @@
 package com.example.monohighlight
 
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
+import android.app.AlertDialog
+import android.net.Uri
+import android.view.accessibility.AccessibilityManager
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
@@ -54,7 +58,15 @@ class MainActivity : Activity() {
             text = "モノクロ＋強調を有効にする"
             textSize = 17f
             setPadding(0, dp(12), 0, dp(12))
-            setOnCheckedChangeListener { _, checked -> Prefs.setActive(this@MainActivity, checked) }
+            setOnCheckedChangeListener { button, checked ->
+                if (checked && !isServiceEnabled()) {
+                    // サービスが無効のままではオーバーレイを出せないので案内する
+                    button.isChecked = false
+                    showEnableGuide()
+                } else {
+                    Prefs.setActive(this@MainActivity, checked)
+                }
+            }
         }
         root.addView(activeSwitch)
 
@@ -134,8 +146,7 @@ class MainActivity : Activity() {
         val enabled = isServiceEnabled()
         status.text = if (enabled) "✅ ユーザー補助サービス: 有効" else
             "⚠️ ユーザー補助サービスが無効です。下のボタンから「MonoHighlight」を有効にしてください。"
-        activeSwitch.isChecked = Prefs.isActive(this)
-        activeSwitch.isEnabled = enabled
+        activeSwitch.isChecked = enabled && Prefs.isActive(this)
     }
 
     private fun saveColors() {
@@ -158,7 +169,32 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun showEnableGuide() {
+        AlertDialog.Builder(this)
+            .setTitle("ユーザー補助サービスを有効にしてください")
+            .setMessage(
+                "1. 次の画面で「インストール済みのアプリ」（または「ダウンロードしたアプリ」）を開く\n" +
+                    "2. 「MonoHighlight」をオンにする\n\n" +
+                    "オンにできない（グレーアウトしている／「制限付き設定」と表示される）場合:\n" +
+                    "設定 → アプリ → MonoHighlight → 右上の︙ →「制限付き設定を許可」を行ってから、もう一度試してください。"
+            )
+            .setPositiveButton("ユーザー補助の設定を開く") { _, _ ->
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            }
+            .setNeutralButton("アプリ情報を開く") { _, _ ->
+                startActivity(
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+                )
+            }
+            .setNegativeButton("閉じる", null)
+            .show()
+    }
+
     private fun isServiceEnabled(): Boolean {
+        val am = getSystemService(AccessibilityManager::class.java)
+        val running = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+            .any { it.resolveInfo.serviceInfo.packageName == packageName }
+        if (running) return true
         val me = ComponentName(this, MonoHighlightService::class.java)
         val list = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES) ?: return false
         return list.split(':').any { ComponentName.unflattenFromString(it) == me }
