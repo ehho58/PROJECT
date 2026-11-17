@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MonoHighlight</string>
+    <string name="service_label">MonoHighlight（モノクロ＋指定色強調）</string>
+    <string name="service_description">画面をモノクロ表示にし、指定したカラーコードに近い色だけを元の色のまま残します。各ウィンドウをキャプチャし、加工した画像をオーバーレイで重ねて表示します。タッチ操作は下のアプリにそのまま届きます。</string>
+    <string name="tile_label">モノクロ強調</string>
+</resources>
